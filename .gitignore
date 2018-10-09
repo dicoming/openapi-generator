@@ -212,3 +212,6 @@ samples/client/petstore/javascript/package-lock.json
 
 # elm
 samples/client/petstore/elm/index.html
+
+# working directory for codegen
+codegen-workdir/

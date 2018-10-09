@@ -1,3 +1,6 @@
+Генерация файла для JMeter с помощью `jmeter-api-codegen.sh`
+
+
 <h1 align="center">OpenAPI Generator</h1>
 
 <div align="center">
