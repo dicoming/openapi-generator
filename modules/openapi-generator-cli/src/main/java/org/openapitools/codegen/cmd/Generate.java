@@ -24,6 +24,7 @@ import io.airlift.airline.Option;
 import org.openapitools.codegen.ClientOptInput;
 import org.openapitools.codegen.CodegenConstants;
 import org.openapitools.codegen.DefaultGenerator;
+import org.openapitools.codegen.DicomGenerator;
 import org.openapitools.codegen.GeneratorNotFoundException;
 import org.openapitools.codegen.config.CodegenConfigurator;
 import org.slf4j.Logger;
@@ -339,7 +340,7 @@ public class Generate implements Runnable {
 
         try {
             final ClientOptInput clientOptInput = configurator.toClientOptInput();
-            new DefaultGenerator().opts(clientOptInput).generate();
+            new DicomGenerator().opts(clientOptInput).generate();
         } catch (GeneratorNotFoundException e) {
             System.err.println(e.getMessage());
             System.err.println("[error] Check the spelling of the generator's name and try again.");
