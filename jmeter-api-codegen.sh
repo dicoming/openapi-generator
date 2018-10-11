@@ -33,3 +33,4 @@ ags="generate -i  ${INPUT_FILE} -g jmeter -o codegen-workdir/output"
 java $JAVA_OPTS -jar $executable $ags
 
 cp common-env-properties.csv codegen-workdir/output
+cp AuthApi.csv codegen-workdir/output
