@@ -31,3 +31,5 @@ export JAVA_OPTS="${JAVA_OPTS} -XX:MaxPermSize=256M -Xmx1024M -DloggerPath=conf/
 ags="generate -i  ${INPUT_FILE} -g jmeter -o codegen-workdir/output"
 
 java $JAVA_OPTS -jar $executable $ags
+
+cp common-env-properties.csv codegen-workdir/output

@@ -11,6 +11,19 @@
       <stringProp name="TestPlan.user_define_classpath"></stringProp>
     </TestPlan>
     <hashTree>
+      <CSVDataSet guiclass="TestBeanGUI" testclass="CSVDataSet" testname="Load CSV Common Test Data " enabled="true">
+        <stringProp name="delimiter">,</stringProp>
+        <stringProp name="fileEncoding"></stringProp>
+        <stringProp name="filename">common-env-properties.csv</stringProp>
+        <boolProp name="quotedData">true</boolProp>
+        <boolProp name="recycle">true</boolProp>
+        <stringProp name="shareMode">shareMode.group</stringProp>
+        <boolProp name="stopThread">false</boolProp>
+        <stringProp name="variableNames"></stringProp>
+        <boolProp name="ignoreFirstLine">true</boolProp>
+        <stringProp name="TestPlan.comments">Общие переменные среды для всех тестов, загружаемые из одного файла</stringProp>
+      </CSVDataSet>
+      <hashTree/>
       <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
         <collectionProp name="Arguments.arguments">
           <elementProp name="threads" elementType="Argument">
@@ -91,14 +104,16 @@
         <hashTree/>
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="{{operationId}} - ${testCase}" enabled="true">
           <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
-            <collectionProp name="Arguments.arguments">{{#queryParams}}
+            <collectionProp name="Arguments.arguments">
+            {{#queryParams}}
               <elementProp name="{{paramName}}" elementType="HTTPArgument">
                 <boolProp name="HTTPArgument.always_encode">false</boolProp>
                 {{=<% %>=}}<stringProp name="Argument.value">${<% paramName %>}</stringProp><%={{ }}=%>
                 <stringProp name="Argument.metadata">=</stringProp>
                 <boolProp name="HTTPArgument.use_equals">true</boolProp>
                 <stringProp name="Argument.name">{{paramName}}</stringProp>
-              </elementProp>{{/queryParams}}
+              </elementProp>
+            {{/queryParams}}
             </collectionProp>
           </elementProp>
           <stringProp name="HTTPSampler.domain"></stringProp>
