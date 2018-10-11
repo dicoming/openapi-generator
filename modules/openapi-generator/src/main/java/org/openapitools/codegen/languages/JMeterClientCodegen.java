@@ -153,6 +153,16 @@ public class JMeterClientCodegen extends DefaultCodegen implements CodegenConfig
     }
 
     /**
+     * Prevent any changing of parameters
+     * @param name Codegen property object
+     * @return same name
+     */
+    @Override
+    public String toParamName(String name) {
+        return name;
+    }
+
+    /**
      * Location to write api files.  You can use the apiPackage() as defined when the class is
      * instantiated
      */
