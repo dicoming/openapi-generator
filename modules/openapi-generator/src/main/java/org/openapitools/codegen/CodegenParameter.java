@@ -25,9 +25,9 @@ import java.util.Map;
 public class CodegenParameter {
     public boolean isFormParam, isQueryParam, isPathParam, isHeaderParam,
             isCookieParam, isBodyParam, hasMore, isContainer,
-            secondaryParam, isCollectionFormatMulti, isPrimitiveType;
+            secondaryParam, isCollectionFormatMulti, isPrimitiveType, isAuthorizationParam;
     public String baseName, paramName, dataType, datatypeWithEnum, dataFormat,
-          collectionFormat, description, unescapedDescription, baseType, defaultValue, enumName;
+          collectionFormat, description, unescapedDescription, baseType, defaultValue, enumName, value;
 
     public String example; // example value (x-example)
     public String jsonSchema;
@@ -42,7 +42,6 @@ public class CodegenParameter {
     public Map<String, Object> vendorExtensions = new HashMap<String, Object>();
     public boolean hasValidation;
     public boolean isNullable;
-
     /**
      * Determines whether this parameter is mandatory. If the parameter is in "path",
      * this property is required and its value MUST be true. Otherwise, the property
@@ -94,7 +93,11 @@ public class CodegenParameter {
      * See http://json-schema.org/latest/json-schema-validation.html#anchor14
      */
     public Number multipleOf;
-    
+
+    public boolean isContentType;
+
+    public boolean hasValue = false;
+
     public CodegenParameter copy() {
         CodegenParameter output = new CodegenParameter();
         output.isFile = this.isFile;
@@ -106,6 +109,9 @@ public class CodegenParameter {
         output.dataType = this.dataType;
         output.datatypeWithEnum = this.datatypeWithEnum;
         output.enumName = this.enumName;
+        output.isAuthorizationParam = this.isAuthorizationParam;
+        output.value = this.value;
+        output.hasValue = this.hasValue;
         output.dataFormat = this.dataFormat;
         output.collectionFormat = this.collectionFormat;
         output.isCollectionFormatMulti = this.isCollectionFormatMulti;
@@ -203,7 +209,11 @@ public class CodegenParameter {
             return false;
         if (baseName != null ? !baseName.equals(that.baseName) : that.baseName != null)
             return false;
+        if (isAuthorizationParam != that.isAuthorizationParam)
+            return false;
         if (paramName != null ? !paramName.equals(that.paramName) : that.paramName != null)
+            return false;
+        if (value != null ? !value.equals(that.value) : that.value != null)
             return false;
         if (dataType != null ? !dataType.equals(that.dataType) : that.dataType != null)
             return false;

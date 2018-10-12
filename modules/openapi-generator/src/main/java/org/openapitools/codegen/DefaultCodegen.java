@@ -2971,7 +2971,6 @@ public class DefaultCodegen implements CodegenConfig {
         } else {
             LOGGER.warn("Unknown parameter type: " + parameter.getName());
         }
-
         // set the parameter excample value
         // should be overridden by lang codegen
         setParameterExampleValue(codegenParameter, parameter);
@@ -4698,6 +4697,6 @@ public class DefaultCodegen implements CodegenConfig {
      */
     public void postProcessFile(File file, String fileType) {
         LOGGER.debug("Post processing file {} ({})", file, fileType);
-    } 
+    }
 
 }

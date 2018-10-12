@@ -17,18 +17,26 @@
 
 package org.openapitools.codegen.languages;
 
-import org.openapitools.codegen.*;
-import org.openapitools.codegen.utils.*;
-import io.swagger.v3.oas.models.*;
-import io.swagger.v3.oas.models.media.*;
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.Operation;
+import io.swagger.v3.oas.models.PathItem;
+import io.swagger.v3.oas.models.media.ArraySchema;
+import io.swagger.v3.oas.models.media.Schema;
+import org.openapitools.codegen.CodegenConfig;
+import org.openapitools.codegen.CodegenParameter;
+import org.openapitools.codegen.CodegenType;
+import org.openapitools.codegen.DefaultCodegen;
+import org.openapitools.codegen.utils.ModelUtils;
 
-import java.util.*;
 import java.io.File;
+import java.util.Arrays;
+import java.util.HashSet;
 
 public class JMeterClientCodegen extends DefaultCodegen implements CodegenConfig {
 
     // source folder where to write the files
     protected String sourceFolder = "";
+
     protected String apiVersion = "1.0.0";
 
     /**
@@ -154,6 +162,7 @@ public class JMeterClientCodegen extends DefaultCodegen implements CodegenConfig
 
     /**
      * Prevent any changing of parameters
+     *
      * @param name Codegen property object
      * @return same name
      */
@@ -202,10 +211,12 @@ public class JMeterClientCodegen extends DefaultCodegen implements CodegenConfig
         String type = null;
         if (typeMapping.containsKey(openAPIType)) {
             type = typeMapping.get(openAPIType);
-            if (languageSpecificPrimitives.contains(type))
+            if (languageSpecificPrimitives.contains(type)) {
                 return toModelName(type);
-        } else
+            }
+        } else {
             type = openAPIType;
+        }
         return toModelName(type);
     }
 
@@ -220,4 +231,18 @@ public class JMeterClientCodegen extends DefaultCodegen implements CodegenConfig
         return input.replace("*/", "*_/").replace("/*", "/_*");
     }
 
+    @Override
+    public void postProcessParameter(CodegenParameter codegenParameter) {
+        if (codegenParameter.isHeaderParam) {
+            if (codegenParameter.baseName.equals("Authorization")) {
+                codegenParameter.isAuthorizationParam = true;
+                codegenParameter.value = "Bearer ${access_token}";
+            } else if (codegenParameter.baseName.equals("Content-Type")) {
+                codegenParameter.isContentType = true;
+            }
+        }
+        if (codegenParameter.value != null) {
+            codegenParameter.hasValue = true;
+        }
+    }
 }
