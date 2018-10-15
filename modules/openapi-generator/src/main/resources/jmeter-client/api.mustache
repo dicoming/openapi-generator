@@ -231,8 +231,18 @@ vars.put(&quot;access_token&quot;, access_token);</stringProp>
         </HeaderManager>
         <hashTree/>
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="{{operationId}} - Test ${testCase} behaviour" enabled="true">
-          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
+            {{#bodyParams}}
+            <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+            {{/bodyParams}}
+                <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
             <collectionProp name="Arguments.arguments">
+            {{#bodyParams}}
+                <elementProp name="" elementType="HTTPArgument">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.value">{{example}}</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                </elementProp>
+            {{/bodyParams}}
             {{#queryParams}}
               <elementProp name="{{paramName}}" elementType="HTTPArgument">
                 <boolProp name="HTTPArgument.always_encode">false</boolProp>

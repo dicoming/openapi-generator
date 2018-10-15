@@ -96,7 +96,9 @@ public class CodegenParameter {
 
     public boolean isContentType;
 
-    public boolean hasValue = false;
+    public boolean hasValue;
+
+    public boolean hasExample;
 
     public CodegenParameter copy() {
         CodegenParameter output = new CodegenParameter();
@@ -140,6 +142,7 @@ public class CodegenParameter {
         output.jsonSchema = this.jsonSchema;
         output.defaultValue = this.defaultValue;
         output.example = this.example;
+        output.hasExample = this.hasExample;
         output.isEnum = this.isEnum;
         if (this._enum != null) {
             output._enum = new ArrayList<String>(this._enum);
@@ -234,6 +237,8 @@ public class CodegenParameter {
         if (defaultValue != null ? !defaultValue.equals(that.defaultValue) : that.defaultValue != null)
             return false;
         if (example != null ? !example.equals(that.example) : that.example != null)
+            return false;
+        if (hasExample != that.hasExample)
             return false;
         if (jsonSchema != null ? !jsonSchema.equals(that.jsonSchema) : that.jsonSchema != null)
             return false;

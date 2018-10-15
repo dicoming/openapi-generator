@@ -244,5 +244,9 @@ public class JMeterClientCodegen extends DefaultCodegen implements CodegenConfig
         if (codegenParameter.value != null) {
             codegenParameter.hasValue = true;
         }
+        if (codegenParameter.example != null) {
+            codegenParameter.hasExample = true;
+        }
+
     }
 }
