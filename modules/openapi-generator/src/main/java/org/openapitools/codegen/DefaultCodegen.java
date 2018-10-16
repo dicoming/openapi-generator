@@ -1193,7 +1193,7 @@ public class DefaultCodegen implements CodegenConfig {
 
         MediaType mediaType = content.values().iterator().next();
         if (mediaType.getExample() != null) {
-            codegenParameter.example = mediaType.getExample().toString();
+            codegenParameter.example = setParameterExampleValueFromContentValueExample(mediaType.getExample());
             return;
         }
 
@@ -1206,6 +1206,10 @@ public class DefaultCodegen implements CodegenConfig {
         }
 
         setParameterExampleValue(codegenParameter);
+    }
+
+    public String setParameterExampleValueFromContentValueExample(Object example) {
+        return example.toString();
     }
 
     /**

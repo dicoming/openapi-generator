@@ -34,3 +34,4 @@ java $JAVA_OPTS -jar $executable $ags
 
 cp common-env-properties.csv codegen-workdir/output
 cp AuthApi.csv codegen-workdir/output
+cp jmeter.properties codegen-workdir/output

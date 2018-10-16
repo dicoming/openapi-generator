@@ -54,6 +54,7 @@ public class CodegenOperation {
     public List<CodegenSecurity> authMethods;
     public List<Tag> tags;
     public List<CodegenResponse> responses = new ArrayList<CodegenResponse>();
+    public int successResponseCode;
     public List<CodegenCallback> callbacks = new ArrayList<>();
     public Set<String> imports = new HashSet<String>();
     public List<Map<String, String>> examples;

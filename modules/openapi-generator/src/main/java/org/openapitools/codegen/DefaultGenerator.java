@@ -1072,6 +1072,15 @@ public class DefaultGenerator extends AbstractGenerator implements Generator {
             LOGGER.warn(operation.getOperationId() + " has not value of consumes to set Content-Type header");
         }
 
+        if (codegenOperation.responses != null && codegenOperation.responses.size() > 0) {
+            String code = codegenOperation.responses.get(0).code;
+            if (code != null) {
+                codegenOperation.successResponseCode = Integer.parseInt(code);
+            } else {
+                LOGGER.warn(operation.getOperationId() + " has not any response codes");
+            }
+
+        }
     }
 
     private static String generateParameterId(Parameter parameter) {

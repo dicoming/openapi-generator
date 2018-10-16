@@ -17,6 +17,8 @@
 
 package org.openapitools.codegen.languages;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.Operation;
 import io.swagger.v3.oas.models.PathItem;
@@ -27,12 +29,17 @@ import org.openapitools.codegen.CodegenParameter;
 import org.openapitools.codegen.CodegenType;
 import org.openapitools.codegen.DefaultCodegen;
 import org.openapitools.codegen.utils.ModelUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Map;
 
 public class JMeterClientCodegen extends DefaultCodegen implements CodegenConfig {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(JMeterClientCodegen.class);
 
     // source folder where to write the files
     protected String sourceFolder = "";
@@ -123,14 +130,27 @@ public class JMeterClientCodegen extends DefaultCodegen implements CodegenConfig
     }
 
     @Override
+    public String setParameterExampleValueFromContentValueExample(Object example) {
+        if (example instanceof Map) {
+            ObjectMapper mapper = new ObjectMapper();
+            try {
+                return mapper.writeValueAsString(example);
+            } catch (JsonProcessingException e) {
+                LOGGER.warn("Can not convert map to JSON of this value:" + example.toString(), e);
+            }
+        }
+        return super.setParameterExampleValueFromContentValueExample(example);
+    }
+
+    @Override
     public void preprocessOpenAPI(OpenAPI openAPI) {
         if (openAPI != null && openAPI.getPaths() != null) {
             for (String pathname : openAPI.getPaths().keySet()) {
                 PathItem path = openAPI.getPaths().get(pathname);
                 if (path.readOperations() != null) {
                     for (Operation operation : path.readOperations()) {
-                        String pathWithDollars = pathname.replaceAll("\\{", "\\$\\{");
-                        operation.addExtension("x-path", pathWithDollars);
+                        String pathWithDollarsAndOperationId = pathname.replaceAll("\\{", "\\$\\{"+operation.getOperationId()+"_");
+                        operation.addExtension("x-path", pathWithDollarsAndOperationId);
                     }
                 }
             }
