@@ -36,6 +36,7 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 public class JMeterClientCodegen extends DefaultCodegen implements CodegenConfig {
 
@@ -149,7 +150,8 @@ public class JMeterClientCodegen extends DefaultCodegen implements CodegenConfig
                 PathItem path = openAPI.getPaths().get(pathname);
                 if (path.readOperations() != null) {
                     for (Operation operation : path.readOperations()) {
-                        String pathWithDollarsAndOperationId = pathname.replaceAll("\\{", "\\$\\{"+operation.getOperationId()+"_");
+                        String pathWithDollarsAndOperationId =
+                                pathname.replaceAll("\\{", "\\$\\{" + operation.getOperationId() + "_");
                         operation.addExtension("x-path", pathWithDollarsAndOperationId);
                     }
                 }
@@ -268,5 +270,30 @@ public class JMeterClientCodegen extends DefaultCodegen implements CodegenConfig
             codegenParameter.hasExample = true;
         }
 
+    }
+
+    @Override
+    protected Set<String> loadIgnoringParameters() {
+        HashSet<String> ignoreParameters = new HashSet<>();
+        ignoreParameters.add("cursor");
+        ignoreParameters.add("size");
+        ignoreParameters.add("name");
+        ignoreParameters.add("sort");
+//        fileName = "ignoring-parameters.txt";
+//        File file = new File(fileName);
+//        if (!file.exists()) {
+//            LOGGER.warn("File "+ fileName+" not exists ");
+//            return ignoreParameters;
+//        }
+//        try {
+//            Scanner scanner = new Scanner(file);
+//            if (scanner.hasNext()) {
+//                ignoreParameters.add(scanner.nextLine());
+//            }
+//        } catch (FileNotFoundException e) {
+//            LOGGER.warn("Can not obtain file "+ fileName, e);
+//            return ignoreParameters;
+//        }
+        return ignoreParameters;
     }
 }

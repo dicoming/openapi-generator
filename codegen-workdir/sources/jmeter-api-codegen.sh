@@ -30,10 +30,10 @@ fi
 
 # if you've executed sbt assembly previously it will use that instead.
 export JAVA_OPTS="${JAVA_OPTS} -XX:MaxPermSize=256M -Xmx1024M -DloggerPath=conf/log4j.properties"
-ags="generate -i  ${INPUT_FILE} -g jmeter -o codegen-workdir/output"
+ags="generate -i  ${INPUT_FILE} -g jmeter -o output"
 
 java $JAVA_OPTS -jar $executable $ags
 
-cp ./sources/common-env-properties.csv ./output
-cp ./sources/AuthApi.csv ./output
-cp ./sources/user-jmeter.properties ./output
+cp ./sources/common-env-properties.csv ./output/common-env-properties.csv
+cp ./sources/AuthApi.csv ./output/AuthApi.csv
+cp ./sources/user-jmeter.properties ./output/user-jmeter.properties

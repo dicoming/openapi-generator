@@ -250,6 +250,8 @@ public class CodegenParameter {
             return false;
         if (isLong != that.isLong)
             return false;
+        if (hasValue != that.hasValue)
+            return false;
         if (isNumber != that.isNumber)
             return false;
         if (isFloat != that.isFloat)

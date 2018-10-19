@@ -1,2 +1,2 @@
 testCase{{#operations}}{{#operation}}{{#hasParams}},{{/hasParams}}{{#allParams}}{{operationId}}_{{paramName}}{{#hasMore}},{{/hasMore}}{{/allParams}},{{operationId}}_successResponseCode{{/operation}}{{/operations}}
-Success{{#operations}}{{#operation}}{{#hasParams}},{{/hasParams}}{{#allParams}}1{{#hasMore}},{{/hasMore}}{{/allParams}},{{successResponseCode}}{{/operation}}{{/operations}}
+Success{{#operations}}{{#operation}}{{#hasParams}},{{/hasParams}}{{#allParams}}{{#hasValue}}{{value}}{{/hasValue}}{{^hasValue}}1{{/hasValue}}{{#hasMore}},{{/hasMore}}{{/allParams}},{{successResponseCode}}{{/operation}}{{/operations}}

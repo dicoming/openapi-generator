@@ -20,7 +20,6 @@ package org.openapitools.codegen;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.common.base.CaseFormat;
 import com.samskivert.mustache.Mustache.Compiler;
-
 import io.swagger.v3.core.util.Json;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.Operation;
@@ -47,7 +46,6 @@ import io.swagger.v3.oas.models.security.SecurityScheme;
 import io.swagger.v3.oas.models.servers.Server;
 import io.swagger.v3.oas.models.servers.ServerVariable;
 import io.swagger.v3.parser.util.SchemaTypeUtil;
-
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -80,8 +78,6 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static org.openapitools.codegen.utils.StringUtils.camelize;
-import static org.openapitools.codegen.utils.StringUtils.underscore;
 import static org.openapitools.codegen.utils.StringUtils.escape;
 
 public class DefaultCodegen implements CodegenConfig {
@@ -135,6 +131,7 @@ public class DefaultCodegen implements CodegenConfig {
     protected String docExtension;
 
     protected String ignoreFilePathOverride;
+    protected Set<String> ignoringParameters = loadIgnoringParameters();
 
     public List<CliOption> cliOptions() {
         return cliOptions;
@@ -2380,7 +2377,9 @@ public class DefaultCodegen implements CodegenConfig {
                 // add form parameters to the beginning of all parameter list
                 if (prependFormOrBodyParameters) {
                     for (CodegenParameter cp : formParams) {
-                        allParams.add(cp.copy());
+                        if (!ignoringParameters.contains(cp.paramName)) {
+                            allParams.add(cp.copy());
+                        }
                     }
                 }
             } else {
@@ -2391,19 +2390,23 @@ public class DefaultCodegen implements CodegenConfig {
                 if (op.vendorExtensions != null && op.vendorExtensions.containsKey("x-codegen-request-body-name")) {
                     bodyParameterName = (String) op.vendorExtensions.get("x-codegen-request-body-name");
                 }
-                bodyParam = fromRequestBody(requestBody, schemas, imports, bodyParameterName);
-                bodyParam.description = escapeText(requestBody.getDescription());
-                postProcessParameter(bodyParam);
+                if (!ignoringParameters.contains(bodyParameterName)) {
+                    bodyParam = fromRequestBody(requestBody, schemas, imports, bodyParameterName);
+                    bodyParam.description = escapeText(requestBody.getDescription());
+                    postProcessParameter(bodyParam);
 
-                bodyParams.add(bodyParam);
+                    bodyParams.add(bodyParam);
 
-                if (prependFormOrBodyParameters) {
-                    allParams.add(bodyParam);
-                }
+                    if (prependFormOrBodyParameters) {
+                        allParams.add(bodyParam);
+                    }
 
-                // add example
-                if (schemas != null) {
-                    op.requestBodyExamples = new ExampleGenerator(schemas, openAPI).generate(null, new ArrayList<String>(getConsumesInfo(openAPI, operation)), bodyParam.baseType);
+                    // add example
+                    if (schemas != null) {
+                        op.requestBodyExamples = new ExampleGenerator(schemas, openAPI)
+                                .generate(null, new ArrayList<String>(getConsumesInfo(openAPI, operation)),
+                                          bodyParam.baseType);
+                    }
                 }
             }
         }
@@ -2416,7 +2419,10 @@ public class DefaultCodegen implements CodegenConfig {
 
                 CodegenParameter p = fromParameter(param, imports);
 
-                // ensure unique params
+                if (ignoringParameters.contains(p.paramName)) {
+                    continue;
+                }
+                    // ensure unique params
                 if (ensureUniqueParams) {
                     if (!isParameterNameUnique(p, allParams)) {
                         p.paramName = generateNextName(p.paramName);
@@ -2443,17 +2449,24 @@ public class DefaultCodegen implements CodegenConfig {
         // add form/body parameter (if any) to the end of all parameter list
         if (!prependFormOrBodyParameters) {
             for (CodegenParameter cp : formParams) {
-                allParams.add(cp.copy());
+                if (!ignoringParameters.contains(cp.paramName)) {
+                    allParams.add(cp.copy());
+                }
             }
 
             for (CodegenParameter cp : bodyParams) {
-                allParams.add(cp.copy());
+                if (!ignoringParameters.contains(cp.paramName)) {
+                    allParams.add(cp.copy());
+                }
             }
         }
 
         // create optional, required parameters
         for (CodegenParameter cp : allParams) {
-            if (cp.required) { //required parameters
+            if (ignoringParameters.contains(cp.paramName)) {
+                continue;
+            }
+                if (cp.required) { //required parameters
                 requiredParams.add(cp.copy());
             } else { // optional parameters
                 optionalParams.add(cp.copy());
@@ -4701,6 +4714,10 @@ public class DefaultCodegen implements CodegenConfig {
      */
     public void postProcessFile(File file, String fileType) {
         LOGGER.debug("Post processing file {} ({})", file, fileType);
+    }
+
+    protected Set<String> loadIgnoringParameters(){
+        return new HashSet<>();
     }
 
 }
