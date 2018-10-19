@@ -67,6 +67,10 @@ public class CodegenOperation {
     public String operationIdCamelCase; // for class names
     public String operationIdSnakeCase;
 
+    public boolean isCreateOperation;
+
+    public boolean isNeededIdFromCreateOperation;
+
     /**
      * Check if there's at least one parameter
      *
@@ -267,6 +271,10 @@ public class CodegenOperation {
             return false;
         if (hasConsumes != that.hasConsumes)
             return false;
+        if (isCreateOperation != that.isCreateOperation)
+            return false;
+        if (isNeededIdFromCreateOperation != that.isNeededIdFromCreateOperation)
+            return false;
         if (hasProduces != that.hasProduces)
             return false;
         if (hasParams != that.hasParams)
@@ -386,6 +394,8 @@ public class CodegenOperation {
         result = 31 * result + (subresourceOperation ? 13:31);
         result = 31 * result + (isMapContainer ? 13:31);
         result = 31 * result + (isListContainer ? 13:31);
+        result = 31 * result + (isCreateOperation ? 13:31);
+        result = 31 * result + (isNeededIdFromCreateOperation ? 13:31);
         result = 31 * result + (isMultipart ? 13:31);
         result = 31 * result + (hasMore ? 13:31);
         result = 31 * result + (isResponseBinary ? 13:31);

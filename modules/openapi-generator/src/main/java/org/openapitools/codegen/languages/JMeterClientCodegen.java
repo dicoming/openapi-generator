@@ -279,6 +279,7 @@ public class JMeterClientCodegen extends DefaultCodegen implements CodegenConfig
         ignoreParameters.add("size");
         ignoreParameters.add("name");
         ignoreParameters.add("sort");
+        ignoreParameters.add("id");
 //        fileName = "ignoring-parameters.txt";
 //        File file = new File(fileName);
 //        if (!file.exists()) {

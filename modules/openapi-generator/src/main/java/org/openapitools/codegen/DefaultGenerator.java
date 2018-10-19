@@ -1057,30 +1057,8 @@ public class DefaultGenerator extends AbstractGenerator implements Generator {
 
     }
 
-    private void postProcessCodegenOperation(CodegenOperation codegenOperation, String resourcePath, String httpMethod,
+    protected void postProcessCodegenOperation(CodegenOperation codegenOperation, String resourcePath, String httpMethod,
                                              Operation operation, Map<String, Schema> schemas, OpenAPI openAPI) {
-        if (codegenOperation.consumes != null && codegenOperation.consumes.size() > 0) {
-            String contentType = codegenOperation.consumes.get(0).get("mediaType");
-            for (CodegenParameter headerParam : codegenOperation.headerParams) {
-                if (headerParam.paramName.equals("Content-Type")) {
-                    headerParam.value = contentType;
-                    headerParam.isContentType = true;
-                    headerParam.hasValue = true;
-                }
-            }
-        } else {
-            LOGGER.warn(operation.getOperationId() + " has not value of consumes to set Content-Type header");
-        }
-
-        if (codegenOperation.responses != null && codegenOperation.responses.size() > 0) {
-            String code = codegenOperation.responses.get(0).code;
-            if (code != null) {
-                codegenOperation.successResponseCode = Integer.parseInt(code);
-            } else {
-                LOGGER.warn(operation.getOperationId() + " has not any response codes");
-            }
-
-        }
     }
 
     private static String generateParameterId(Parameter parameter) {

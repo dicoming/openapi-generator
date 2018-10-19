@@ -170,7 +170,7 @@
                   <stringProp name="RegexExtractor.default"></stringProp>
                   <stringProp name="RegexExtractor.match_number"></stringProp>
                   <boolProp name="RegexExtractor.default_empty_value">true</boolProp>
-                  <stringProp name="TestPlan.comments">Извлечение acess_token для последущего использования в оставшихся методах</stringProp>
+                  <stringProp name="TestPlan.comments">Извлечение access_token для последущего использования в оставшихся методах</stringProp>
               </RegexExtractor>
             <hashTree/>
           </hashTree>
@@ -212,8 +212,13 @@
             <stringProp name="parameters"></stringProp>
             <boolProp name="resetInterpreter">false</boolProp>
             <stringProp name="script">String access_token = props.get(&quot;access_token&quot;).trim();
-
-vars.put(&quot;access_token&quot;, access_token);</stringProp>
+vars.put(&quot;access_token&quot;, access_token);
+                {{#isNeededIdFromCreateOperation}}
+                    
+String create_response_id = props.get(&quot;create_response_id&quot;).trim();
+vars.put(&quot;{{operationId}}_id&quot;, create_response_id);
+                {{/isNeededIdFromCreateOperation}}
+            </stringProp>
         </BeanShellPreProcessor>
         <hashTree/>
         <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
@@ -284,6 +289,19 @@ vars.put(&quot;access_token&quot;, access_token);</stringProp>
             <boolProp name="ignoreFirstLine">true</boolProp>
           </CSVDataSet>
           <hashTree/>
+          {{#isCreateOperation}}
+                  <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Regular Expression Extractor" enabled="true">
+                      <stringProp name="RegexExtractor.useHeaders">unescaped</stringProp>
+                      <stringProp name="RegexExtractor.refname">create_response_id</stringProp>
+                      <stringProp name="RegexExtractor.regex">&quot;id&quot;\s?:\s?(.+?),</stringProp>
+                      <stringProp name="RegexExtractor.template">$1$</stringProp>
+                      <stringProp name="RegexExtractor.default"></stringProp>
+                      <stringProp name="RegexExtractor.match_number"></stringProp>
+                      <boolProp name="RegexExtractor.default_empty_value">true</boolProp>
+                      <stringProp name="TestPlan.comments">Извлечение id для последущего использования в запросах вместо path-параметра id</stringProp>
+                  </RegexExtractor>
+                  <hashTree/>
+          {{/isCreateOperation}}
         </hashTree>
         <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="HTTP Status Assertion" enabled="true">
           <collectionProp name="Asserion.test_strings">
@@ -294,6 +312,15 @@ vars.put(&quot;access_token&quot;, access_token);</stringProp>
           <intProp name="Assertion.test_type">8</intProp>
         </ResponseAssertion>
         <hashTree/>
+        {{#isCreateOperation}}
+            <BeanShellAssertion guiclass="BeanShellAssertionGui" testclass="BeanShellAssertion" testname="BeanShell Assertion" enabled="true">
+                <stringProp name="BeanShellAssertion.query">${__setProperty(create_response_id, ${create_response_id})};</stringProp>
+                <stringProp name="BeanShellAssertion.filename"></stringProp>
+                <stringProp name="BeanShellAssertion.parameters"></stringProp>
+                <boolProp name="BeanShellAssertion.resetInterpreter">false</boolProp>
+            </BeanShellAssertion>
+            <hashTree/>
+        {{/isCreateOperation}}
       </hashTree>
           {{/operation}}
       {{/operations}}
