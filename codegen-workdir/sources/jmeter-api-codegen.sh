@@ -19,11 +19,13 @@ if [ ! -d "${APP_DIR}" ]; then
   APP_DIR=`cd "${APP_DIR}"; pwd`
 fi
 
-executable="./modules/openapi-generator-cli/target/openapi-generator-cli.jar"
+executable="../modules/openapi-generator-cli/target/openapi-generator-cli.jar"
 
 if [ ! -f "$executable" ]
 then
-  mvn -B clean package
+  cd ..
+  mvn -DskipTests=true -Dmaven.install.skip=true -T 4 -B clean package
+  cd ./codegen-workdir
 fi
 
 # if you've executed sbt assembly previously it will use that instead.
@@ -32,6 +34,6 @@ ags="generate -i  ${INPUT_FILE} -g jmeter -o codegen-workdir/output"
 
 java $JAVA_OPTS -jar $executable $ags
 
-cp common-env-properties.csv codegen-workdir/output
-cp AuthApi.csv codegen-workdir/output
-cp jmeter.properties codegen-workdir/output
+cp ./sources/common-env-properties.csv ./output
+cp ./sources/AuthApi.csv ./output
+cp ./sources/user-jmeter.properties ./output
