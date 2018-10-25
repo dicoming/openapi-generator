@@ -96,6 +96,7 @@ public class JMeterClientCodegen extends DefaultCodegen implements CodegenConfig
                 ".jmx");       // the extension for each file to write
 
         apiTemplateFiles.put("testdata-localhost.mustache", ".csv");
+        apiTemplateFiles.put("start-load-test.mustache", ".sh");
 
         /*
          * Template Location.  This is the location which templates will be read from.  The generator

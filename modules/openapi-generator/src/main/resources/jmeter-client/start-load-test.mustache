@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+export working_dir=$(pwd);
+export jmeter_dir="./../../../../jmeter";
+cd $jmeter_dir;
+bash setup_jmeter.sh
+cd $working_dir;
+
+mkdir -p results;
+mkdir -p logs;
+mkdir -p reports/{{classname}};
+
+export reports_dir="./reports/{{classname}}";
+rm -rf $reports_dir;
+
+$jmeter_dir/apache-jmeter-4.0/bin/jmeter -p user-jmeter.properties -n -t {{classname}}.jmx -l results/{{classname}}.jtl --forceDeleteResultFile -L INFO -j ./logs/{{classname}}.log -e -o $reports_dir
