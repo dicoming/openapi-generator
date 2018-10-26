@@ -12,4 +12,8 @@ mkdir -p reports/{{classname}};
 export reports_dir="./reports/{{classname}}";
 rm -rf $reports_dir;
 
-$jmeter_dir/apache-jmeter-4.0/bin/jmeter -p user-jmeter.properties -n -t {{classname}}.jmx -l results/{{classname}}.jtl --forceDeleteResultFile -L INFO -j ./logs/{{classname}}.log -e -o $reports_dir
+export jtl_file="results/DependenceOnFoodIntakeApi.jtl"
+
+$jmeter_dir/apache-jmeter-5.0/bin/jmeter -p user-jmeter.properties -n -t DependenceOnFoodIntakeApi.jmx -l $jtl_file --forceDeleteResultFile -L INFO -j ./logs/DependenceOnFoodIntakeApi.log
+
+$jmeter_dir/apache-jmeter-4.0/bin/jmeter -g $jtl_file -o $reports_dir
