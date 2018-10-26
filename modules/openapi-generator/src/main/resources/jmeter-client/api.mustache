@@ -195,7 +195,7 @@
                 <boolProp name="resetInterpreter">false</boolProp>
                 <stringProp name="parameters"></stringProp>
                 <stringProp name="filename"></stringProp>
-                <stringProp name="script">bsh.shared.path = &quot;/home/this/busmanov/projects/openapi-generator/codegen-workdir/final/tmp.txt&quot;;
+                <stringProp name="script">bsh.shared.path = System.getProperty(&quot;user.dir&quot;) + &quot;/tmp.txt&quot;;
 file = new File(bsh.shared.path);
 
 if (file.exists()){
@@ -324,7 +324,7 @@ vars.put(&quot;access_token&quot;, access_token);
                     <stringProp name="parameters"></stringProp>
                     <stringProp name="filename"></stringProp>
                     <stringProp name="script">line = bsh.shared.ids.get(ctx.getThreadNum());
-                        vars.put(&quot;getDependenceOnFoodIntake_id&quot;, line);</stringProp>
+vars.put(&quot;{{operationId}}_id&quot;, line);</stringProp>
                 </BeanShellPreProcessor>
                 <hashTree/>
             {{/isNeededIdFromCreateOperation}}
@@ -405,15 +405,15 @@ vars.put(&quot;access_token&quot;, access_token);
                 <BeanShellAssertion guiclass="BeanShellAssertionGui" testclass="BeanShellAssertion" testname="BeanShell Assertion" enabled="true">
                     <stringProp name="BeanShellAssertion.query">List ids = new ArrayList();
 
-                        FileInputStream fstream = new FileInputStream(bsh.shared.path);
-                        String strLine;
-                        BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
-                        while ((strLine = br.readLine()) != null)   {
-                        ids.add(strLine);
-                        }
-                        br.close();
+FileInputStream fstream = new FileInputStream(bsh.shared.path);
+String strLine;
+BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
+while ((strLine = br.readLine()) != null)   {
+ids.add(strLine);
+}
+br.close();
 
-                        bsh.shared.ids = ids;
+bsh.shared.ids = ids;
                     </stringProp>
                     <stringProp name="BeanShellAssertion.filename"></stringProp>
                     <stringProp name="BeanShellAssertion.parameters"></stringProp>
