@@ -191,6 +191,24 @@
               <boolProp name="BeanShellAssertion.resetInterpreter">false</boolProp>
           </BeanShellAssertion>
           <hashTree/>
+            <BeanShellPreProcessor guiclass="TestBeanGUI" testclass="BeanShellPreProcessor" testname="Delete tmp.txt file" enabled="true">
+                <boolProp name="resetInterpreter">false</boolProp>
+                <stringProp name="parameters"></stringProp>
+                <stringProp name="filename"></stringProp>
+                <stringProp name="script">bsh.shared.path = &quot;/home/this/busmanov/projects/openapi-generator/codegen-workdir/final/tmp.txt&quot;;
+file = new File(bsh.shared.path);
+
+if (file.exists()){
+file.delete();
+}
+
+f = new FileOutputStream(file, true);
+printStream = new PrintStream(f);
+
+bsh.shared.printStream = printStream;
+                </stringProp>
+            </BeanShellPreProcessor>
+            <hashTree/>
       </hashTree>
     {{#operations}}{{#operation}}<ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group - {{operationId}}" enabled="true">
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
@@ -213,11 +231,6 @@
             <boolProp name="resetInterpreter">false</boolProp>
             <stringProp name="script">String access_token = props.get(&quot;access_token&quot;).trim();
 vars.put(&quot;access_token&quot;, access_token);
-                {{#isNeededIdFromCreateOperation}}
-                    
-String create_response_id = props.get(&quot;create_response_id&quot;).trim();
-vars.put(&quot;{{operationId}}_id&quot;, create_response_id);
-                {{/isNeededIdFromCreateOperation}}
             </stringProp>
         </BeanShellPreProcessor>
         <hashTree/>
@@ -305,6 +318,16 @@ vars.put(&quot;{{operationId}}_id&quot;, create_response_id);
             <boolProp name="ignoreFirstLine">true</boolProp>
           </CSVDataSet>
           <hashTree/>
+            {{#isNeededIdFromCreateOperation}}
+                <BeanShellPreProcessor guiclass="TestBeanGUI" testclass="BeanShellPreProcessor" testname="load id" enabled="true">
+                    <boolProp name="resetInterpreter">false</boolProp>
+                    <stringProp name="parameters"></stringProp>
+                    <stringProp name="filename"></stringProp>
+                    <stringProp name="script">line = bsh.shared.ids.get(ctx.getThreadNum());
+                        vars.put(&quot;getDependenceOnFoodIntake_id&quot;, line);</stringProp>
+                </BeanShellPreProcessor>
+                <hashTree/>
+            {{/isNeededIdFromCreateOperation}}
           {{#isCreateOperation}}
                   <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Regular Expression Extractor" enabled="true">
                       <stringProp name="RegexExtractor.useHeaders">unescaped</stringProp>
@@ -316,6 +339,16 @@ vars.put(&quot;{{operationId}}_id&quot;, create_response_id);
                       <boolProp name="RegexExtractor.default_empty_value">true</boolProp>
                       <stringProp name="TestPlan.comments">Извлечение id для последущего использования в запросах вместо path-параметра id</stringProp>
                   </RegexExtractor>
+                  <hashTree/>
+                  <BeanShellPostProcessor guiclass="TestBeanGUI" testclass="BeanShellPostProcessor" testname="save ids" enabled="true">
+                      <stringProp name="filename"></stringProp>
+                      <stringProp name="parameters"></stringProp>
+                      <boolProp name="resetInterpreter">false</boolProp>
+                      <stringProp name="script">printStream = bsh.shared.printStream;
+                          this.interpreter.setOut(printStream);
+                          print(vars.get(&quot;create_response_id&quot;));
+                          printStream.flush();</stringProp>
+                  </BeanShellPostProcessor>
                   <hashTree/>
           {{/isCreateOperation}}
         </hashTree>
@@ -341,9 +374,57 @@ vars.put(&quot;{{operationId}}_id&quot;, create_response_id);
             <hashTree/>
         {{/isCreateOperation}}
       </hashTree>
+        {{#isCreateOperation}}
+            <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Thread Group - fill array of ids from file" enabled="true">
+                <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+                <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
+                    <boolProp name="LoopController.continue_forever">false</boolProp>
+                    <stringProp name="LoopController.loops">1</stringProp>
+                </elementProp>
+                <stringProp name="ThreadGroup.num_threads">1</stringProp>
+                <stringProp name="ThreadGroup.ramp_time">1</stringProp>
+                <boolProp name="ThreadGroup.scheduler">false</boolProp>
+                <stringProp name="ThreadGroup.duration"></stringProp>
+                <stringProp name="ThreadGroup.delay"></stringProp>
+            </ThreadGroup>
+            <hashTree>
+                <kg.apc.jmeter.samplers.DummySampler guiclass="kg.apc.jmeter.samplers.DummySamplerGui" testclass="kg.apc.jmeter.samplers.DummySampler" testname="jp@gc - Dummy Sampler" enabled="true">
+                    <boolProp name="WAITING">true</boolProp>
+                    <boolProp name="SUCCESFULL">true</boolProp>
+                    <stringProp name="RESPONSE_CODE">200</stringProp>
+                    <stringProp name="RESPONSE_MESSAGE">OK</stringProp>
+                    <stringProp name="REQUEST_DATA">Dummy Sampler used to simulate requests and responses
+                        without actual network activity. This helps debugging tests.</stringProp>
+                    <stringProp name="RESPONSE_DATA">Dummy Sampler used to simulate requests and responses
+                        without actual network activity. This helps debugging tests.</stringProp>
+                    <stringProp name="RESPONSE_TIME">${__Random(50,500)}</stringProp>
+                    <stringProp name="LATENCY">${__Random(1,50)}</stringProp>
+                    <stringProp name="CONNECT">${__Random(1,5)}</stringProp>
+                </kg.apc.jmeter.samplers.DummySampler>
+                <hashTree/>
+                <BeanShellAssertion guiclass="BeanShellAssertionGui" testclass="BeanShellAssertion" testname="BeanShell Assertion" enabled="true">
+                    <stringProp name="BeanShellAssertion.query">List ids = new ArrayList();
+
+                        FileInputStream fstream = new FileInputStream(bsh.shared.path);
+                        String strLine;
+                        BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
+                        while ((strLine = br.readLine()) != null)   {
+                        ids.add(strLine);
+                        }
+                        br.close();
+
+                        bsh.shared.ids = ids;
+                    </stringProp>
+                    <stringProp name="BeanShellAssertion.filename"></stringProp>
+                    <stringProp name="BeanShellAssertion.parameters"></stringProp>
+                    <boolProp name="BeanShellAssertion.resetInterpreter">false</boolProp>
+                </BeanShellAssertion>
+                <hashTree/>
+            </hashTree>
+        {{/isCreateOperation}}
           {{/operation}}
       {{/operations}}
-      <!-- end of operations -->                      t
+      <!-- end of operations -->
       <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="false">
         <boolProp name="ResultCollector.error_logging">false</boolProp>
         <objProp>
