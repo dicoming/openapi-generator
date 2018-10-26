@@ -71,6 +71,10 @@ public class CodegenOperation {
 
     public boolean isNeededIdFromCreateOperation;
 
+    public boolean isUpdateOperation;
+
+    public boolean isOperationForChange;
+
     /**
      * Check if there's at least one parameter
      *
@@ -273,6 +277,10 @@ public class CodegenOperation {
             return false;
         if (isCreateOperation != that.isCreateOperation)
             return false;
+        if (isUpdateOperation != that.isUpdateOperation)
+            return false;
+        if (isOperationForChange != that.isOperationForChange)
+            return false;
         if (isNeededIdFromCreateOperation != that.isNeededIdFromCreateOperation)
             return false;
         if (hasProduces != that.hasProduces)
@@ -395,6 +403,8 @@ public class CodegenOperation {
         result = 31 * result + (isMapContainer ? 13:31);
         result = 31 * result + (isListContainer ? 13:31);
         result = 31 * result + (isCreateOperation ? 13:31);
+        result = 31 * result + (isUpdateOperation ? 13:31);
+        result = 31 * result + (isOperationForChange ? 13:31);
         result = 31 * result + (isNeededIdFromCreateOperation ? 13:31);
         result = 31 * result + (isMultipart ? 13:31);
         result = 31 * result + (hasMore ? 13:31);

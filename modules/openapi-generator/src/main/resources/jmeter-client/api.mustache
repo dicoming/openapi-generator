@@ -235,6 +235,22 @@ vars.put(&quot;{{operationId}}_id&quot;, create_response_id);
           </collectionProp>
         </HeaderManager>
         <hashTree/>
+        {{#isOperationForChange}}
+        <LoopController guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
+            <boolProp name="LoopController.continue_forever">true</boolProp>
+            <stringProp name="LoopController.loops">1</stringProp>
+        </LoopController>
+        <hashTree>
+            <CounterConfig guiclass="CounterConfigGui" testclass="CounterConfig" testname="Counter" enabled="false">
+                <stringProp name="CounterConfig.start"></stringProp>
+                <stringProp name="CounterConfig.end"></stringProp>
+                <stringProp name="CounterConfig.incr"></stringProp>
+                <stringProp name="CounterConfig.name"></stringProp>
+                <stringProp name="CounterConfig.format"></stringProp>
+                <boolProp name="CounterConfig.per_user">false</boolProp>
+            </CounterConfig>
+        <hashTree/>
+        {{/isOperationForChange}}
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="{{operationId}} - Test ${testCase} behaviour" enabled="true">
             {{#bodyParams}}
             <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
@@ -303,7 +319,10 @@ vars.put(&quot;{{operationId}}_id&quot;, create_response_id);
                   <hashTree/>
           {{/isCreateOperation}}
         </hashTree>
-        <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="HTTP Status Assertion" enabled="true">
+        {{#isOperationForChange}}
+        </hashTree>
+        {{/isOperationForChange}}
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="HTTP Status Assertion" enabled="true">
           <collectionProp name="Asserion.test_strings">
             {{=<% %>=}}<stringProp name="812696575">${<% operationId %>_successResponseCode}</stringProp><%={{ }}=%>
           </collectionProp>

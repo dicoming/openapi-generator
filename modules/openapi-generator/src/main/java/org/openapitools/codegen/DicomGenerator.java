@@ -77,12 +77,22 @@ public class DicomGenerator extends DefaultGenerator {
             }
 
         }
+        if (codegenOperation.operationId.startsWith("create")
+                || codegenOperation.operationId.startsWith("update")) {
+            codegenOperation.isOperationForChange = true;
+        }
         if (codegenOperation.operationId.startsWith("create")) {
             codegenOperation.isCreateOperation = true;
-        } else if (codegenOperation.operationId.startsWith("get")
+        }
+        if (codegenOperation.operationId.startsWith("get")
                 || codegenOperation.operationId.startsWith("update")
                 || codegenOperation.operationId.startsWith("delete")) {
             codegenOperation.isNeededIdFromCreateOperation = true;
         }
+
+        if (codegenOperation.operationId.startsWith("update")) {
+            codegenOperation.isUpdateOperation = true;
+        }
+
     }
 }
