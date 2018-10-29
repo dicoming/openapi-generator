@@ -13,6 +13,7 @@ export reports_dir="./reports/{{classname}}";
 rm -rf $reports_dir;
 
 export jtl_file="results/{{classname}}.jtl"
+rm -f $jtl_file;
 
 $jmeter_dir/apache-jmeter-5.0/bin/jmeter -p user-jmeter.properties -n -t {{classname}}.jmx -l $jtl_file --forceDeleteResultFile -L INFO -j ./logs/{{classname}}_test_load.log
 
