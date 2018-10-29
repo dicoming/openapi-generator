@@ -17,8 +17,6 @@
 
 package org.openapitools.codegen;
 
-import io.swagger.v3.oas.models.security.Scopes;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -36,7 +34,8 @@ public class CodegenSecurity {
     public String flow, authorizationUrl, tokenUrl;
     public List<Map<String, Object>> scopes;
     public Boolean isCode, isPassword, isApplication, isImplicit;
-
+    public String defaultValue;
+    public Boolean hasDefaultValue;
     @Override
     public String toString() {
         return String.format(Locale.ROOT, "%s(%s)", name, type);
@@ -52,6 +51,10 @@ public class CodegenSecurity {
         if (name != null ? !name.equals(that.name) : that.name != null)
             return false;
         if (type != null ? !type.equals(that.type) : that.type != null)
+            return false;
+        if (defaultValue != null ? !defaultValue.equals(that.defaultValue) : that.defaultValue != null)
+            return false;
+        if (hasDefaultValue != null ? !hasDefaultValue.equals(that.hasDefaultValue) : that.hasDefaultValue != null)
             return false;
         if (hasMore != null ? !hasMore.equals(that.hasMore) : that.hasMore != null)
             return false;
@@ -91,6 +94,7 @@ public class CodegenSecurity {
     public int hashCode() {
         int result = name != null ? name.hashCode() : 0;
         result = 31 * result + (type != null ? type.hashCode() : 0);
+        result = 31 * result + (defaultValue != null ? defaultValue.hashCode() : 0);
         result = 31 * result + (hasMore != null ? hasMore.hashCode() : 0);
         result = 31 * result + (isBasic != null ? isBasic.hashCode() : 0);
         result = 31 * result + (isOAuth != null ? isOAuth.hashCode() : 0);

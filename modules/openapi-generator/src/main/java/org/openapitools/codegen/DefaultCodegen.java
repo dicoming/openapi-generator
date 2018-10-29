@@ -3086,6 +3086,7 @@ public class DefaultCodegen implements CodegenConfig {
                 }
             }
 
+            postProcessEachCodegenSecurity(cs, securityScheme);
             codegenSecurities.add(cs);
         }
 
@@ -3104,6 +3105,10 @@ public class DefaultCodegen implements CodegenConfig {
         }
 
         return codegenSecurities;
+    }
+
+    public CodegenSecurity postProcessEachCodegenSecurity(CodegenSecurity cs, SecurityScheme securityScheme) {
+        return cs;
     }
 
     protected void setReservedWordsLowerCase(List<String> words) {

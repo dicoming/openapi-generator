@@ -24,8 +24,10 @@ import io.swagger.v3.oas.models.Operation;
 import io.swagger.v3.oas.models.PathItem;
 import io.swagger.v3.oas.models.media.ArraySchema;
 import io.swagger.v3.oas.models.media.Schema;
+import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.openapitools.codegen.CodegenConfig;
 import org.openapitools.codegen.CodegenParameter;
+import org.openapitools.codegen.CodegenSecurity;
 import org.openapitools.codegen.CodegenType;
 import org.openapitools.codegen.DefaultCodegen;
 import org.openapitools.codegen.utils.ModelUtils;
@@ -220,6 +222,15 @@ public class JMeterClientCodegen extends DefaultCodegen implements CodegenConfig
             return getSchemaType(p) + "[String, " + getTypeDeclaration(inner) + "]";
         }
         return super.getTypeDeclaration(p);
+    }
+
+    @Override
+    public CodegenSecurity postProcessEachCodegenSecurity(CodegenSecurity cs, SecurityScheme securityScheme) {
+        if (cs.keyParamName.equals("Authorization")) {
+            cs.hasDefaultValue = true;
+            cs.defaultValue = "Bearer ${access_token}";
+        }
+        return cs;
     }
 
     /**

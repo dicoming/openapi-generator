@@ -235,16 +235,29 @@ vars.put(&quot;access_token&quot;, access_token);
         </BeanShellPreProcessor>
         <hashTree/>
         <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
-          <collectionProp name="HeaderManager.headers">{{#headerParams}}
-            <elementProp name="" elementType="Header">
-              <stringProp name="Header.name">{{paramName}}</stringProp>
-                {{#hasValue}}
-                    <stringProp name="Header.value">{{value}}</stringProp>
-                {{/hasValue}}
-                {{^hasValue}}
-                    <stringProp name="Header.value">${__RandomString(10,qwertyuiopasdfghjklzxcvbnm)}</stringProp>
-                {{/hasValue}}
-            </elementProp>{{/headerParams}}
+          <collectionProp name="HeaderManager.headers">
+            {{#headerParams}}
+                <elementProp name="" elementType="Header">
+                  <stringProp name="Header.name">{{paramName}}</stringProp>
+                    {{#hasValue}}
+                        <stringProp name="Header.value">{{value}}</stringProp>
+                    {{/hasValue}}
+                    {{^hasValue}}
+                        <stringProp name="Header.value">${__RandomString(10,qwertyuiopasdfghjklzxcvbnm)}</stringProp>
+                    {{/hasValue}}
+                </elementProp>
+            {{/headerParams}}
+            {{#authMethods}}
+                <elementProp name="" elementType="Header">
+                    <stringProp name="Header.name">{{keyParamName}}</stringProp>
+                    {{#hasDefaultValue}}
+                        <stringProp name="Header.value">{{defaultValue}}</stringProp>
+                    {{/hasDefaultValue}}
+                    {{^hasDefaultValue}}
+                        <stringProp name="Header.value">${__RandomString(10,qwertyuiopasdfghjklzxcvbnm)}</stringProp>
+                    {{/hasDefaultValue}}
+                </elementProp>
+            {{/authMethods}}
           </collectionProp>
         </HeaderManager>
         <hashTree/>
@@ -495,7 +508,7 @@ bsh.shared.ids = ids;
           <stringProp name="filename">/home/this/busmanov/projects/openapi-generator/codegen-workdir/output/{{classname}}_SummaryReport.txt</stringProp>
       </ResultCollector>
       <hashTree/>
-        <ResultCollector guiclass="RespTimeGraphVisualizer" testclass="ResultCollector" testname="Response Time Graph" enabled="true">
+        <ResultCollector guiclass="RespTimeGraphVisualizer" testclass="ResultCollector" testname="Response Time Graph" enabled="false">
             <boolProp name="ResultCollector.error_logging">false</boolProp>
             <objProp>
                 <name>saveConfig</name>

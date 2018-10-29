@@ -27,6 +27,8 @@ public class DicomGenerator extends DefaultGenerator {
 
         ops.forEach(operation -> {
             if (operation.operationId.matches("create.*")) {
+                create.add(0, operation);
+            } else if (operation.operationId.matches("new.*")) {
                 create.add(operation);
             } else if (operation.operationId.matches("find.*")) {
                 find.add(operation);

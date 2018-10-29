@@ -1018,7 +1018,6 @@ public class DefaultGenerator extends AbstractGenerator implements Generator {
             try {
                 CodegenOperation codegenOperation =
                         config.fromOperation(resourcePath, httpMethod, operation, schemas, openAPI);
-                postProcessCodegenOperation(codegenOperation, resourcePath, httpMethod, operation, schemas, openAPI);
                 codegenOperation.tags = new ArrayList<>(tags);
                 config.addOperationToGroup(config.sanitizeTag(tag.getName()), resourcePath, operation, codegenOperation,
                                            operations);
@@ -1044,6 +1043,7 @@ public class DefaultGenerator extends AbstractGenerator implements Generator {
                     codegenOperation.hasAuthMethods = true;
                 }
                 */
+                postProcessCodegenOperation(codegenOperation, resourcePath, httpMethod, operation, schemas, openAPI);
             } catch (Exception ex) {
                 String msg = "Could not process operation:\n" //
                         + "  Tag: " + tag + "\n"//
