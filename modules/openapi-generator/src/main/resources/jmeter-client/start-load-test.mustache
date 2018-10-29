@@ -15,6 +15,14 @@ rm -rf $reports_dir;
 export jtl_file="results/{{classname}}.jtl"
 rm -f $jtl_file;
 
-$jmeter_dir/apache-jmeter-5.0/bin/jmeter -p user-jmeter.properties -n -t {{classname}}.jmx -l $jtl_file --forceDeleteResultFile -L INFO -j ./logs/{{classname}}_test_load.log
+export test_load_log="./logs/{{classname}}_test_load.log"
+rm -f $test_load_log
 
-$jmeter_dir/apache-jmeter-4.0/bin/jmeter -g $jtl_file -o $reports_dir -L INFO -j ./logs/{{classname}}_report_generation.log
+export report_generation_log="./logs/{{classname}}_report_generation.log"
+rm -f $report_generation_log
+
+export JVM_ARGS="-Xms1024m -Xmx12024m -XX:MaxMetaspaceSize=2048m -d64"
+
+$jmeter_dir/apache-jmeter-5.0/bin/jmeter -p user-jmeter.properties -n -t {{classname}}.jmx -l $jtl_file --forceDeleteResultFile -L INFO -j $test_load_log
+
+$jmeter_dir/apache-jmeter-4.0/bin/jmeter -g $jtl_file -o $reports_dir -L INFO -j $report_generation_log
