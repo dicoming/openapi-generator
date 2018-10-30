@@ -277,7 +277,7 @@ vars.put(&quot;access_token&quot;, access_token);
             </CounterConfig>
         <hashTree/>
         {{/isOperationForChange}}
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="{{operationId}} - {{basePathWithoutHost}}{{vendorExtensions.x-path}}" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="{{operationId}} - Test ${testCase} behaviour" enabled="true">
             {{#bodyParams}}
             <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
             {{/bodyParams}}
