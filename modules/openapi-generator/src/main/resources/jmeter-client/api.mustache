@@ -358,9 +358,9 @@ vars.put(&quot;{{operationId}}_id&quot;, line);</stringProp>
                       <stringProp name="parameters"></stringProp>
                       <boolProp name="resetInterpreter">false</boolProp>
                       <stringProp name="script">printStream = bsh.shared.printStream;
-                          this.interpreter.setOut(printStream);
-                          print(vars.get(&quot;create_response_id&quot;));
-                          printStream.flush();</stringProp>
+this.interpreter.setOut(printStream);
+print(vars.get(&quot;create_response_id&quot;));
+printStream.flush();</stringProp>
                   </BeanShellPostProcessor>
                   <hashTree/>
           {{/isCreateOperation}}
