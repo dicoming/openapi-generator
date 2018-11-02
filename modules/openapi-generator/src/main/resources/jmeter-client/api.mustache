@@ -342,16 +342,12 @@ vars.put(&quot;{{operationId}}_id&quot;, line);</stringProp>
                 <hashTree/>
             {{/isNeededIdFromCreateOperation}}
           {{#isCreateOperation}}
-                  <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Regular Expression Extractor" enabled="true">
-                      <stringProp name="RegexExtractor.useHeaders">unescaped</stringProp>
-                      <stringProp name="RegexExtractor.refname">create_response_id</stringProp>
-                      <stringProp name="RegexExtractor.regex">&quot;id&quot;\s?:\s?(.+?),</stringProp>
-                      <stringProp name="RegexExtractor.template">$1$</stringProp>
-                      <stringProp name="RegexExtractor.default"></stringProp>
-                      <stringProp name="RegexExtractor.match_number"></stringProp>
-                      <boolProp name="RegexExtractor.default_empty_value">true</boolProp>
-                      <stringProp name="TestPlan.comments">Извлечение id для последущего использования в запросах вместо path-параметра id</stringProp>
-                  </RegexExtractor>
+              <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="JSON Extract id" enabled="true">
+                  <stringProp name="TestPlan.comments">Извлечение id для последущего использования в запросах вместо path-параметра id</stringProp>
+                  <stringProp name="JSONPostProcessor.referenceNames">create_response_id</stringProp>
+                  <stringProp name="JSONPostProcessor.jsonPathExprs">$.id</stringProp>
+                  <stringProp name="JSONPostProcessor.match_numbers">1</stringProp>
+              </JSONPostProcessor>
                   <hashTree/>
                   <BeanShellPostProcessor guiclass="TestBeanGUI" testclass="BeanShellPostProcessor" testname="save ids" enabled="true">
                       <stringProp name="filename"></stringProp>
