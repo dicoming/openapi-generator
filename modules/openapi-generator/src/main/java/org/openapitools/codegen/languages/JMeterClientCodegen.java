@@ -226,7 +226,7 @@ public class JMeterClientCodegen extends DefaultCodegen implements CodegenConfig
 
     @Override
     public CodegenSecurity postProcessEachCodegenSecurity(CodegenSecurity cs, SecurityScheme securityScheme) {
-        if (cs.keyParamName.equals("Authorization")) {
+        if (cs.keyParamName.startsWith("Authorization")) {
             cs.hasDefaultValue = true;
             cs.defaultValue = "Bearer ${access_token}";
         }
